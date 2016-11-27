@@ -69,12 +69,6 @@ Readability.prototype.getContent = function(notDeprecated) {
   }
 
 
-    //return this.cache['article-content'] = this._document.getElementById("articleBodyContents").textContent;
-    //return this.cache['article-content'] = 'Got it dude!';
-
-    //changed innerHTML to textContent below  - kevinOriginal
-    //return this.cache['article-content'] = articleContent.textContent;
-
 
   //changed innerHTML to textContent below  - kevinOriginal
   return this.cache['article-content'] = articleContent.textContent;
@@ -225,10 +219,8 @@ function read(html, options, callback) {
 
 
   if (html.search(/news\.naver\.com/) !== -1 ) {
-    console.log('NAVER is succesfully detected!');
+    console.log('NAVER is detected!!');
     checkNaver = true;
-  } else {
-    console.log('it is not NAVER!');
   }
 
 
@@ -274,13 +266,6 @@ function read(html, options, callback) {
     if (typeof body !== 'string') body = body.toString();
     if (!body) return callback(new Error('Empty story body returned from URL'));
 
-    //trying NAVER in jsdomParse
-
-    /* var article = { };
-    article.content = window.document.getElementById("articleBodyContents").textContent;
-
-    */
-
     if(checkNaver) {
       jsdom.env({
         html: body,
@@ -299,14 +284,14 @@ function read(html, options, callback) {
             window.close();
             return callback(new Error('No body tag was found.'));
           }
-
+          //naverExplicit is just for naver
           try {
+            var naverExplicit = {
+              content : window.document.getElementById("articleBodyContents").textContent,
+              title : window.document.getElementById("articleTitle").textContent
+            }
 
-
-
-            console.log(window.document.getElementById("articleBodyContents").textContent);
-
-
+            callback(null, naverExplicit, meta);
 
           } catch(ex) {
             window.close();
